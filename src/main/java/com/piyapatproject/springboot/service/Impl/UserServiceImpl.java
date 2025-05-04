@@ -6,6 +6,7 @@ import com.piyapatproject.springboot.entity.User;
 import com.piyapatproject.springboot.repository.RoleRepository;
 import com.piyapatproject.springboot.repository.UserRepository;
 import com.piyapatproject.springboot.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -17,11 +18,14 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
     private RoleRepository roleRepository;
+    private PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository,
-                           RoleRepository roleRepository) {
+                           RoleRepository roleRepository,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class UserServiceImpl implements UserService {
         user.setName(userDto.getFirstName() + " " + userDto.getLastName());
         user.setEmail(userDto.getEmail());
         // encrypt the password using spring security
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         Role role = roleRepository.findByName("ROLE_ADMIN");
         if(role == null){
