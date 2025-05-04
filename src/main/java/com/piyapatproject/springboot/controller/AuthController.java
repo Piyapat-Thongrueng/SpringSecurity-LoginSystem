@@ -60,7 +60,7 @@ public class AuthController {
         return "redirect:/register?success";
     }
 
-    // handler method to handle list of users
+    // handler method to handle lists of users
     @GetMapping("/users")
     public String users(Model model) {
         List<UserDto> users = userService.findAllUsers();
